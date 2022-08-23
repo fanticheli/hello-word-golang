@@ -1,2 +1,2 @@
 # hello-world-golang
-Application designed to train skills in deployment using github actions and dockerfile.
+Simple api to train skills in deployment using github actions and dockerfile.
