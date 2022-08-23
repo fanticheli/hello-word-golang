@@ -4,9 +4,19 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/gorilla/mux"
+	"github.com/spf13/viper"
 )
+
+func init() {
+	viper.SetConfigFile(`config.json`)
+	err := viper.ReadInConfig()
+	if err != nil {
+		panic(err)
+	}
+}
 
 func HandleHelloName(w http.ResponseWriter, rq *http.Request) {
 	vars := mux.Vars(rq)
@@ -21,8 +31,13 @@ func HandleHello(w http.ResponseWriter, rq *http.Request) {
 }
 
 func main() {
+	port := viper.GetString("server.port")
+
+	if port == "" {
+		port = os.Getenv("PORT")
+	}
 	r := mux.NewRouter()
 	r.HandleFunc("/", HandleHello)
 	r.HandleFunc("/{name}", HandleHelloName).Methods("GET")
-	http.ListenAndServe(":8080", r)
+	http.ListenAndServe(fmt.Sprintf(":%v", port), r)
 }
