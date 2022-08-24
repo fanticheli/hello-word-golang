@@ -20,4 +20,7 @@ WORKDIR /root/
 COPY --from=builder /app/main .
 COPY --from=builder /app/config.json .
 
+# Expose port 8080 to the outside world
+EXPOSE 8080
+
 CMD ["./main"]
