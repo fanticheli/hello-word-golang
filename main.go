@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 
@@ -31,13 +32,16 @@ func HandleHello(w http.ResponseWriter, rq *http.Request) {
 }
 
 func main() {
-	port := viper.GetString("server.port")
+	port := os.Getenv("PORT")
 
 	if port == "" {
-		port = os.Getenv("PORT")
+		log.Fatal("$PORT must be set")
 	}
+
 	r := mux.NewRouter()
 	r.HandleFunc("/", HandleHello)
 	r.HandleFunc("/{name}", HandleHelloName).Methods("GET")
+
+	log.Printf("LISTEN ON PORT: %v", port)
 	http.ListenAndServe(fmt.Sprintf(":%v", port), r)
 }
