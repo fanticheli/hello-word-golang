@@ -32,10 +32,10 @@ func HandleHello(w http.ResponseWriter, rq *http.Request) {
 }
 
 func main() {
-	port := viper.GetString("server.port")
+	port := os.Getenv("PORT")
 
 	if port == "" {
-		port = os.Getenv("PORT")
+		port = viper.GetString("server.port")
 	}
 
 	r := mux.NewRouter()
